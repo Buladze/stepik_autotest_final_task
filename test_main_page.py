@@ -1,8 +1,11 @@
+from .pages.main_page import MainPage
 import pytest
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 
-def test_guest_can_go_to_login_page(browser):
-    link = "https://www.google.com/?hl=en"
-    browser.get(link)
-    browser.find_element(By.CSS_SELECTOR, "[aria-label='Google']")
+
+def test_guest_can_go_to_start_page(browser, request):
+    user_language = request.config.getoption("language")
+    link = f"https://www.google.com/?hl={user_language}"
+    page = MainPage(browser, link)
+    page.open()
+    page.go_to_search()
+    page.should_be_headline()
